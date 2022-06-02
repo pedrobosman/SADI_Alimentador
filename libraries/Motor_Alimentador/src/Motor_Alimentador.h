@@ -3,7 +3,10 @@
 
 #include <Servo.h>
 
-#define GPIO_MOTOR 7 //PWM
+#define GPIO_MOTOR          7  //PWM
+
+#define ANGULO_DESPEJAR     180  
+#define ANGULO_FECHAR       0
 
 extern Servo motor;
 

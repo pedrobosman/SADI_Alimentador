@@ -1,28 +1,26 @@
 #include "Arduino_FreeRTOS.h"
 #include "task.h"
-//#include "semphr.h"
+
 
 #include "tasks_commom.h" 
 #include "Motor_Alimentador.h"
-
+#include "Ultrassom_Alimentador.h"
   
 //Tasks
 TaskHandle_t        ledTaskH;
 TaskHandle_t        sineTaskH;
 
 
-//Mutex
-//SemaphoreHandle_t   SerialMutex;
-
 void setup() {
     inicializar_motor();
+    inicializar_ultrassom();
     Serial.begin(9600);
     
     xTaskCreate(ledTask,            //Funcao
                 "ledTask",          //Nome
                 128,                //Pilha
                 NULL,               //Parametro
-                1,                  //Prioridade
+                5,                  //Prioridade
                 &ledTaskH);
      
 }
@@ -33,12 +31,13 @@ void loop() {
  
 
 void ledTask(void *arg) {
+    despejar_alimento();
     
     while(true) {
-        despejar_alimento();
-        vTaskDelay(1000/portTICK_PERIOD_MS);
+      vTaskDelay(500/portTICK_PERIOD_MS );
+      if(verificar_tampa_despejando() == true){
         fechar_recipiente();
-        vTaskDelay(1000/portTICK_PERIOD_MS);
+      }
     }
 }
  

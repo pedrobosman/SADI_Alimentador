@@ -1,0 +1,26 @@
+#######################################
+# Syntax Coloring Map
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+inicializar_motor	KEYWORD2
+despejar_alimento	KEYWORD2
+fechar_recipiente	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+
+GPIO_MOTOR	LITERAL1
+
+ANGULO_DESPEJAR	LITERAL1
+ANGULO_FECHAR	LITERAL1
