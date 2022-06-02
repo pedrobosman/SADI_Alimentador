@@ -51,3 +51,11 @@ void definir_data(int dia,int mes ,int ano){
     tm_relogio.tm_year = ano;
   }
 }
+
+bool passou_do_horario(int hora,int minuto,int segundo){
+  if((tm_relogio.tm_hour>= hora) && (tm_relogio.tm_min>= minuto)  && (tm_relogio.tm_sec >= segundo-1)){
+    return true;
+  }else{
+    return false;   
+  }  
+}

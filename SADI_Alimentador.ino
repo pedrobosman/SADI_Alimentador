@@ -40,7 +40,15 @@ void loop() {
 
 
 void ledTask(void *arg) {
+  definir_horario(19, 31, 00);
+  Serial.println("Comecei");
   while (true) {
-    vTaskDelay(5000 / portTICK_PERIOD_MS);
+    if(passou_do_horario(19, 31, 5)){
+      despejar_alimento();
+      vTaskDelay(3000 / portTICK_PERIOD_MS);
+      fechar_recipiente();
+      vTaskDelete(NULL);
+    }    
+    vTaskDelay(200 / portTICK_PERIOD_MS);
   }
 }

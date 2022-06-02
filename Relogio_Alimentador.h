@@ -13,4 +13,5 @@ void definir_horario(int,int,int);
 
 void definir_data(int,int,int);
 
+bool passou_do_horario(int,int,int);
 #endif

@@ -4,6 +4,7 @@ Servo motor;
 
 void inicializar_motor(void){
   motor.attach(GPIO_MOTOR);
+  fechar_recipiente();
 }
 
 
