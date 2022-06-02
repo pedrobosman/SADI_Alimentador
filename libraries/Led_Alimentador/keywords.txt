@@ -1,0 +1,25 @@
+#######################################
+# Syntax Coloring Map
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+inicializar_luz	KEYWORD2
+
+acender_luz	KEYWORD2
+
+desligar_luz	KEYWORD2
+
+acender_luz_como_dimer	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+GPIO_LUZ	LITERAL1
+ 
