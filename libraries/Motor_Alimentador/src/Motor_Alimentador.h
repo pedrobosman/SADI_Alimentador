@@ -5,8 +5,8 @@
 
 #define GPIO_MOTOR          7  //PWM
 
-#define ANGULO_DESPEJAR     180  
 #define ANGULO_FECHAR       0
+#define ANGULO_DESPEJAR     180  
 
 extern Servo motor;
 
