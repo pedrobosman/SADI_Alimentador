@@ -2,6 +2,8 @@
 
 struct tm tm_relogio;
 
+bool novo_dia = false;
+
 void task_relogio(void *arg) {
    while (true) {
     if (tm_relogio.tm_sec < 59) {
@@ -20,6 +22,9 @@ void task_relogio(void *arg) {
           tm_relogio.tm_hour = 0;
       }
     }
+    if((tm_relogio.tm_hour == 0) && (tm_relogio.tm_min == 0)){
+        novo_dia = true;
+    }
     vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }
@@ -27,12 +32,15 @@ void task_relogio(void *arg) {
 void definir_horario(int horas, int minutos, int segundos) {
   if (horas >= 0 || horas <= 23) {
     tm_relogio.tm_hour = horas;
+    EEPROM.put(0, horas);
   }
   if (minutos >= 0 || minutos <= 59) {
     tm_relogio.tm_min = minutos;
+    EEPROM.put(sizeof(int), minutos);
   }
   if (segundos >= 0 || segundos <= 59) {
     tm_relogio.tm_sec = segundos;
+    EEPROM.put(2*sizeof(int), minutos);
   }
 }
 

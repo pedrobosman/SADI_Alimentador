@@ -6,6 +6,7 @@ Alimentar Json_para_alimentar(DynamicJsonDocument alimentar_json) {
     alimentar_obj.hora                = (int)alimentar_json["hora"];
     alimentar_obj.minuto              = (int)alimentar_json["minuto"];
     alimentar_obj.tempo_vazao_ms      = (double)alimentar_json["tempo_vazao_ms"];
+    alimentar_obj.ja_alimentou        = (bool)alimentar_json["ja_alimentou"];
   return alimentar_obj;
 }
 
@@ -20,3 +21,4 @@ String Alimentar_para_json(Alimentar obj) {
   serializeJson(alimentar_json, json);
   return json;
 }
+

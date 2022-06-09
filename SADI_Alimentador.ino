@@ -1,6 +1,7 @@
 #include "Arduino_FreeRTOS.h"
 #include "task.h"
 #include "ArduinoJson.h"
+#include <EEPROM.h>
 
 #include "tasks_commom.h"
 #include "Motor_Alimentador.h"
@@ -23,8 +24,16 @@ void setup() {
   inicializar_luz();
   inicializar_ldr();
 
-  definir_horario(0, 0, 0);
-  definir_data(1, 0 , 2000);
+  //Recuperando última hora definida
+  int hora = 0, minuto = 0,  segundo = 0;
+  EEPROM.get(0, hora);
+  EEPROM.get(sizeof(int), minuto);
+  EEPROM.get(2 * sizeof(int), segundo);
+  if (hora == 0 && minuto == 0) {
+    minuto = 10;
+  }
+
+  definir_horario(hora, minuto, segundo);
   fechar_recipiente();
 
   xTaskCreate(task_relogio, "task_relogio", TASK_STACK_SIZE_RELOGIO, NULL, TASK_PRIORITY_RELOGIO, NULL);
@@ -41,9 +50,10 @@ void loop() {
 
 
 void alimentador_main(void *arg) {
+  vTaskDelay(1000 / portTICK_PERIOD_MS);
   while (true) {
     for (int i = 0; i <= NMAX_HORARIOS_PARA_ALIMENTAR; i++) {
-      if (passou_do_horario(dar_alimento[i].hora, dar_alimento[i].minuto, 0) && (!dar_alimento[i].ja_alimentou) && dar_alimento[i].minuto > 0) {
+      if (passou_do_horario(dar_alimento[i].hora, dar_alimento[i].minuto, 0) && (!dar_alimento[i].ja_alimentou)) {
         despejar_alimento();
         vTaskDelay(dar_alimento[i].tempo_vazao_ms / portTICK_PERIOD_MS);
         fechar_recipiente();
@@ -52,8 +62,14 @@ void alimentador_main(void *arg) {
     }
     if (luminosidade_ambiente() > 2.5) {
       acender_luz();
-    }else{
+    } else {
       desligar_luz();
+    }
+    if (novo_dia) {
+      novo_dia = false;
+      for (int i = 0; i <= NMAX_HORARIOS_PARA_ALIMENTAR; i++) {
+        dar_alimento[i].ja_alimentou = false;
+      }
     }
   }
   vTaskDelay(320 / portTICK_PERIOD_MS);
@@ -63,6 +79,7 @@ void alimentador_main(void *arg) {
 
 void task_serial(void *arg) {
   Serial.println("Comecei");
+  Serial.println(horario_para_json());
   while (true) {
 
     if (Serial.available() > 0) {

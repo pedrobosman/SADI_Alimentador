@@ -1,3 +1,4 @@
+
 /*Ao enviar mensagem com erro:
 //Respota: {"erro":"Tipo do Erro"}
 //{"erro":"InvalidInput"}
@@ -10,8 +11,6 @@
 
 
 
-
-
 /*Verificar o horário de alimentação a partir do id
 //Resposta:
 //
@@ -19,14 +18,10 @@
 
 
 
-
-
 /*Verificar número máximo de horários de alimentação
 //Resposta: {"nmax_id":20}
 //
 {"tipo_msg":3}
-
-
 
 
 
@@ -45,13 +40,13 @@
 
 
 Rotina Exemplo:
-//Os minutos do horário de alimentação têm que ser maior que 01
 
-{"tipo_msg":5}
+{"tipo_msg":5} //Ver qual horário
+
 //Definir Horario p/ alimentar e verificar
-{"tipo_msg":1,"id":1,"hora":8,"minuto":15,"tempo_vazao_ms":500}
-{"tipo_msg":1,"id":2,"hora":12,"minuto":20,"tempo_vazao_ms":1000}
-{"tipo_msg":1,"id":3,"hora":18,"minuto":05,"tempo_vazao_ms":2000}
+{"tipo_msg":1,"id":1,"hora":8,"minuto":15,"tempo_vazao_ms":500, "ja_alimentou":0}
+{"tipo_msg":1,"id":2,"hora":12,"minuto":20,"tempo_vazao_ms":1000, "ja_alimentou":0}
+{"tipo_msg":1,"id":3,"hora":18,"minuto":05,"tempo_vazao_ms":2000, "ja_alimentou":0}
 
 {"tipo_msg":2,"id":1}
 {"tipo_msg":2,"id":2}

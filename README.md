@@ -1,7 +1,10 @@
-Enviar no Serial
+Compilar no arduino:
+
+Modificar em: Preferências->local do sketchbook para o diretório desse sketch
+
+Enviar no Serial:
 
 Rotina Exemplo:
-//Os minutos do horário de alimentação têm que ser maior que 01
 
 {"tipo_msg":5} //Ver horario do arduino
 

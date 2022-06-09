@@ -5,7 +5,11 @@
 #include "Arduino.h"
 #include <time.h>
 #include "ArduinoJson.h"
+#include <EEPROM.h>
+
 extern struct tm tm_relogio;
+
+extern bool novo_dia;
 
 void task_relogio(void *);
 
@@ -16,4 +20,5 @@ void definir_data(int,int,int);
 bool passou_do_horario(int,int,int);
 
 String horario_para_json();
+
 #endif
