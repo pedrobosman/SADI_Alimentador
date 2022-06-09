@@ -1,0 +1,44 @@
+/*Ao enviar mensagem com erro:
+//Respota: {"erro":"Tipo do Erro"}
+//{"erro":"InvalidInput"}
+
+/*Criar novo horário de alimentação
+//Resposta:
+//Resposta:{"erro":"id_errado"}
+//
+{"tipo_msg":1,"id":2,"hora":15,"minuto":22,"tempo_vazao_ms":200}
+
+
+
+
+
+/*Verificar o horário de alimentação a partir do id
+//Resposta:
+//
+{"tipo_msg":2,"id":2}
+
+
+
+
+
+/*Verificar número máximo de horários de alimentação
+//Resposta: {"nmax_id":20}
+//
+{"tipo_msg":3}
+
+
+
+
+
+/*Definir horário do arduino
+//Resposta:
+//
+{"tipo_msg":4,"hora":15,"minuto":22,"segundo":20}
+
+
+
+
+/*Receber o horário do arduino
+//Resposta:{"hora":15,"minuto":22,"segundo":24}
+//
+{"tipo_msg":5}

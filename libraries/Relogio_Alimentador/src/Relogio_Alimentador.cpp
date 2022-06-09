@@ -59,3 +59,14 @@ bool passou_do_horario(int hora,int minuto,int segundo){
     return false;   
   }  
 }
+
+String horario_para_json(){
+  String json;
+  DynamicJsonDocument horario_json(1024);
+  horario_json["hora"]            = tm_relogio.tm_hour;
+  horario_json["minuto"]          = tm_relogio.tm_min;
+  horario_json["segundo"]         = tm_relogio.tm_sec;
+
+  serializeJson(horario_json, json);
+  return json;
+}
