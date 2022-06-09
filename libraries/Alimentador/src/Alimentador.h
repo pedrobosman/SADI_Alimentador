@@ -10,6 +10,7 @@ class Alimentar{
     int hora;
     int minuto;
     double tempo_vazao_ms;
+    bool ja_alimentou;
 };
 
 Alimentar Json_para_alimentar(DynamicJsonDocument);

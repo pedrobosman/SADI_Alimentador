@@ -14,8 +14,8 @@
 //Tasks
 //TaskHandle_t        ledTaskH;
 Alimentar dar_alimento[NMAX_HORARIOS_PARA_ALIMENTAR];
-
 void setup() {
+
   Serial.begin(9600);
   Serial.setTimeout(1000);
   inicializar_motor();
@@ -23,16 +23,42 @@ void setup() {
   inicializar_luz();
   inicializar_ldr();
 
+  definir_horario(0, 0, 0);
+  definir_data(1, 0 , 2000);
+  fechar_recipiente();
+
   xTaskCreate(task_relogio, "task_relogio", TASK_STACK_SIZE_RELOGIO, NULL, TASK_PRIORITY_RELOGIO, NULL);
 
   xTaskCreate(task_serial, "task_serial", TASK_STACK_SIZE_SERIAL, NULL, TASK_PRIORITY_SERIAL, NULL);
 
-  //xTaskCreate(alimentador, "task_alimentador", TASK_STACK_SIZE_ALIMENTADOR, NULL, TASK_PRIORITY_ALIMENTADOR, NULL);
+  xTaskCreate(alimentador_main, "alimentador_main", TASK_STACK_SIZE_ALIMENTADOR, NULL, TASK_PRIORITY_ALIMENTADOR, NULL);
+
 }
 
 void loop() {
   // Nada é feito aqui, Todas as funções são feitas em Tasks
 }
+
+
+void alimentador_main(void *arg) {
+  while (true) {
+    for (int i = 0; i <= NMAX_HORARIOS_PARA_ALIMENTAR; i++) {
+      if (passou_do_horario(dar_alimento[i].hora, dar_alimento[i].minuto, 0) && (!dar_alimento[i].ja_alimentou) && dar_alimento[i].minuto > 0) {
+        despejar_alimento();
+        vTaskDelay(dar_alimento[i].tempo_vazao_ms / portTICK_PERIOD_MS);
+        fechar_recipiente();
+        dar_alimento[i].ja_alimentou = true;
+      }
+    }
+    if (luminosidade_ambiente() > 2.5) {
+      acender_luz();
+    }else{
+      desligar_luz();
+    }
+  }
+  vTaskDelay(320 / portTICK_PERIOD_MS);
+}
+
 
 
 void task_serial(void *arg) {
@@ -61,7 +87,7 @@ void task_serial(void *arg) {
               if (alimentar_set.id == 0 || alimentar_set.id > NMAX_HORARIOS_PARA_ALIMENTAR + 1) {
                 Serial.println("{\"erro\":\"id_errado\"}");
               } else {
-                dar_alimento[alimentar_set.id - 1] = alimentar_set;                
+                dar_alimento[alimentar_set.id - 1] = alimentar_set;
               }
               break;
             }
@@ -84,7 +110,7 @@ void task_serial(void *arg) {
               break;
             }
           case 4: {//Set Relogio Arduino
-              definir_horario(valores_do_json["hora"],valores_do_json["minuto"],valores_do_json["segundo"]);
+              definir_horario(valores_do_json["hora"], valores_do_json["minuto"], valores_do_json["segundo"]);
               break;
             }
           case 5: { //Get Relogio Arduino

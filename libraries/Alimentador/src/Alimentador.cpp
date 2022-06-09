@@ -16,7 +16,7 @@ String Alimentar_para_json(Alimentar obj) {
   alimentar_json["hora"]            = obj.hora;
   alimentar_json["minuto"]          = obj.minuto;
   alimentar_json["tempo_vazao_ms"]  = obj.tempo_vazao_ms;
-
+  alimentar_json["ja_alimentou"]    = obj.ja_alimentou;
   serializeJson(alimentar_json, json);
   return json;
 }

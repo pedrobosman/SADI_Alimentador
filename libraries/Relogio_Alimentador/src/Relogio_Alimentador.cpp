@@ -3,10 +3,7 @@
 struct tm tm_relogio;
 
 void task_relogio(void *arg) {
-  definir_horario(0, 0, 0);
-  definir_data(1,0 ,2000);
-
-  while (true) {
+   while (true) {
     if (tm_relogio.tm_sec < 59) {
       tm_relogio.tm_sec += 1;
     }
@@ -53,7 +50,7 @@ void definir_data(int dia,int mes ,int ano){
 }
 
 bool passou_do_horario(int hora,int minuto,int segundo){
-  if((tm_relogio.tm_hour>= hora) && (tm_relogio.tm_min>= minuto)  && (tm_relogio.tm_sec >= segundo-1)){
+  if((tm_relogio.tm_hour >= hora) && (tm_relogio.tm_min>=minuto)){
     return true;
   }else{
     return false;   

@@ -6,7 +6,7 @@
 //Resposta:
 //Resposta:{"erro":"id_errado"}
 //
-{"tipo_msg":1,"id":2,"hora":15,"minuto":22,"tempo_vazao_ms":200}
+{"tipo_msg":1,"id":2,"hora":17,"minuto":15,"tempo_vazao_ms":200}
 
 
 
@@ -42,3 +42,29 @@
 //Resposta:{"hora":15,"minuto":22,"segundo":24}
 //
 {"tipo_msg":5}
+
+
+Rotina Exemplo:
+//Os minutos do horário de alimentação têm que ser maior que 01
+
+{"tipo_msg":5}
+//Definir Horario p/ alimentar e verificar
+{"tipo_msg":1,"id":1,"hora":8,"minuto":15,"tempo_vazao_ms":500}
+{"tipo_msg":1,"id":2,"hora":12,"minuto":20,"tempo_vazao_ms":1000}
+{"tipo_msg":1,"id":3,"hora":18,"minuto":05,"tempo_vazao_ms":2000}
+
+{"tipo_msg":2,"id":1}
+{"tipo_msg":2,"id":2}
+{"tipo_msg":2,"id":3}
+
+
+//Modificar Horário no arduino
+{"tipo_msg":4,"hora":8,"minuto":14,"segundo":55}
+{"tipo_msg":2,"id":1}
+
+{"tipo_msg":4,"hora":12,"minuto":19,"segundo":55}
+{"tipo_msg":2,"id":2}
+
+{"tipo_msg":4,"hora":18,"minuto":04,"segundo":55}
+{"tipo_msg":2,"id":3}
+
