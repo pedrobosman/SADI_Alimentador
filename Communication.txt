@@ -63,3 +63,4 @@ Rotina Exemplo:
 {"tipo_msg":4,"hora":18,"minuto":04,"segundo":55}
 {"tipo_msg":2,"id":3}
 
+{"tipo_msg":4,"hora":23,"minuto":59,"segundo":55}

@@ -29,9 +29,6 @@ void setup() {
   EEPROM.get(0, hora);
   EEPROM.get(sizeof(int), minuto);
   EEPROM.get(2 * sizeof(int), segundo);
-  if (hora == 0 && minuto == 0) {
-    minuto = 10;
-  }
 
   definir_horario(hora, minuto, segundo);
   fechar_recipiente();
@@ -52,8 +49,8 @@ void loop() {
 void alimentador_main(void *arg) {
   vTaskDelay(1000 / portTICK_PERIOD_MS);
   while (true) {
-    for (int i = 0; i <= NMAX_HORARIOS_PARA_ALIMENTAR; i++) {
-      if (passou_do_horario(dar_alimento[i].hora, dar_alimento[i].minuto, 0) && (!dar_alimento[i].ja_alimentou)) {
+    for (int i = 0; i < NMAX_HORARIOS_PARA_ALIMENTAR; i++) {
+      if (passou_do_horario(dar_alimento[i].hora, dar_alimento[i].minuto, 0) && (!dar_alimento[i].ja_alimentou) && dar_alimento[i].id > 0) {
         despejar_alimento();
         vTaskDelay(dar_alimento[i].tempo_vazao_ms / portTICK_PERIOD_MS);
         fechar_recipiente();
@@ -67,12 +64,12 @@ void alimentador_main(void *arg) {
     }
     if (novo_dia) {
       novo_dia = false;
-      for (int i = 0; i <= NMAX_HORARIOS_PARA_ALIMENTAR; i++) {
+      for (int i = 0; i < NMAX_HORARIOS_PARA_ALIMENTAR; i++) {
         dar_alimento[i].ja_alimentou = false;
       }
     }
   }
-  vTaskDelay(320 / portTICK_PERIOD_MS);
+  vTaskDelay(120 / portTICK_PERIOD_MS);
 }
 
 
@@ -99,29 +96,30 @@ void task_serial(void *arg) {
         switch ((int)valores_do_json["tipo_msg"])
         {
           case 1: {//Nova Alimentação
-              Alimentar alimentar_set;
-              alimentar_set = Json_para_alimentar(valores_do_json);
-              if (alimentar_set.id == 0 || alimentar_set.id > NMAX_HORARIOS_PARA_ALIMENTAR + 1) {
+              int id = (int)valores_do_json["id"];
+              if (id == 0 || id > NMAX_HORARIOS_PARA_ALIMENTAR) {
                 Serial.println("{\"erro\":\"id_errado\"}");
               } else {
-                dar_alimento[alimentar_set.id - 1] = alimentar_set;
+                dar_alimento[id - 1] = Json_para_alimentar(valores_do_json);
               }
               break;
             }
           case 2: {//Enviar Alimentação
               Alimentar alimentar_get;
-              alimentar_get = dar_alimento[(int)valores_do_json["id"] - 1];
-              if (alimentar_get.id == 0 || alimentar_get.id > NMAX_HORARIOS_PARA_ALIMENTAR + 1) {
+              int id = (int)valores_do_json["id"];
+              if ( id == 0 || id > NMAX_HORARIOS_PARA_ALIMENTAR) {
                 Serial.println("{\"erro\":\"id_errado\"}");
               } else {
+                alimentar_get = dar_alimento[id - 1];
                 Serial.println(Alimentar_para_json(alimentar_get));
               }
               break;
             }
           case 3: {//Enviar Máximo ID's
               DynamicJsonDocument id_json_doc(32);
-              id_json_doc["nmax_id"] = NMAX_HORARIOS_PARA_ALIMENTAR;
               String nmax_id_json;
+              
+              id_json_doc["nmax_id"] = NMAX_HORARIOS_PARA_ALIMENTAR;
               serializeJson(id_json_doc, nmax_id_json);
               Serial.println(nmax_id_json);
               break;
