@@ -18,7 +18,7 @@ Alimentar dar_alimento[NMAX_HORARIOS_PARA_ALIMENTAR];
 void setup() {
 
   Serial.begin(9600);
-  Serial.setTimeout(1000);
+  Serial.setTimeout(100);
   inicializar_motor();
   inicializar_ultrassom();
   inicializar_luz();
@@ -80,7 +80,7 @@ void task_serial(void *arg) {
   while (true) {
 
     if (Serial.available() > 0) {
-      String receber_json = Serial.readString();
+      String receber_json = Serial.readStringUntil("\n");
       DynamicJsonDocument valores_do_json(256);
       DeserializationError err = deserializeJson(valores_do_json, receber_json);
       if (err)

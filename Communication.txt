@@ -7,7 +7,7 @@
 //Resposta:
 //Resposta:{"erro":"id_errado"}
 //
-{"tipo_msg":1,"id":2,"hora":17,"minuto":15,"tempo_vazao_ms":200}
+{"tipo_msg":1,"id":1,"hora":8,"minuto":15,"tempo_vazao_ms":500, "ja_alimentou":0}
 
 
 
