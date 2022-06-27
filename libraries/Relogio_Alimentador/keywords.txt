@@ -15,10 +15,10 @@ task_relogio	KEYWORD2
 definir_horario	KEYWORD2
 definir_data	KEYWORD2
 passou_do_horario	KEYWORD2
-horario_para_json   KEYWORD2
-novo_dia    KEYWORD2   
+horario_para_json	KEYWORD2
+novo_dia	KEYWORD2   
 #######################################
 # Constants (LITERAL1)
 #######################################
 tm_relogio	LITERAL1
-novo_dia    LITERAL1
+novo_dia	LITERAL1

@@ -53,8 +53,12 @@ void alimentador_main(void *arg) {
       if (passou_do_horario(dar_alimento[i].hora, dar_alimento[i].minuto, 0) && (!dar_alimento[i].ja_alimentou) && dar_alimento[i].id > 0) {
         despejar_alimento();
         vTaskDelay(dar_alimento[i].tempo_vazao_ms / portTICK_PERIOD_MS);
+        if (verificar_tampa_despejando()) {
+          dar_alimento[i].ja_alimentou = true;
+        } else {
+          dar_alimento[i].ja_alimentou = false;
+        }
         fechar_recipiente();
-        dar_alimento[i].ja_alimentou = true;
       }
     }
     if (luminosidade_ambiente() > 2.5) {
@@ -68,8 +72,9 @@ void alimentador_main(void *arg) {
         dar_alimento[i].ja_alimentou = false;
       }
     }
-  }
-  vTaskDelay(120 / portTICK_PERIOD_MS);
+    //Serial.println(distancia_ultrassom());
+    vTaskDelay(120 / portTICK_PERIOD_MS);
+  }  
 }
 
 
@@ -118,7 +123,7 @@ void task_serial(void *arg) {
           case 3: {//Enviar Máximo ID's
               DynamicJsonDocument id_json_doc(32);
               String nmax_id_json;
-              
+
               id_json_doc["nmax_id"] = NMAX_HORARIOS_PARA_ALIMENTAR;
               serializeJson(id_json_doc, nmax_id_json);
               Serial.println(nmax_id_json);
