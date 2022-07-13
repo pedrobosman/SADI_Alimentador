@@ -5,7 +5,9 @@
 #include <Arduino.h>
 
 #define GPIO_LUZ 3
- 
+
+extern bool led_status; 
+
 void inicializar_luz(void);
 
 void acender_luz(void);

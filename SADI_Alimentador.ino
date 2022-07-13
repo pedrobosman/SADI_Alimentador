@@ -15,6 +15,11 @@
 //Tasks
 //TaskHandle_t        ledTaskH;
 Alimentar dar_alimento[NMAX_HORARIOS_PARA_ALIMENTAR];
+
+int porcentagem_lampada = 100;
+double tensao_ldr = 2.5;
+
+
 void setup() {
 
   Serial.begin(9600);
@@ -47,7 +52,7 @@ void loop() {
 
 
 void alimentador_main(void *arg) {
-  vTaskDelay(1000 / portTICK_PERIOD_MS);
+  vTaskDelay(200 / portTICK_PERIOD_MS);
   while (true) {
     for (int i = 0; i < NMAX_HORARIOS_PARA_ALIMENTAR; i++) {
       if (passou_do_horario(dar_alimento[i].hora, dar_alimento[i].minuto, 0) && (!dar_alimento[i].ja_alimentou) && dar_alimento[i].id > 0) {
@@ -61,8 +66,8 @@ void alimentador_main(void *arg) {
         fechar_recipiente();
       }
     }
-    if (luminosidade_ambiente() > 2.5) {
-      acender_luz();
+    if (luminosidade_ambiente() > tensao_ldr) {
+      acender_luz_como_dimer(porcentagem_lampada);
     } else {
       desligar_luz();
     }
@@ -74,7 +79,7 @@ void alimentador_main(void *arg) {
     }
     //Serial.println(distancia_ultrassom());
     vTaskDelay(120 / portTICK_PERIOD_MS);
-  }  
+  }
 }
 
 
@@ -90,10 +95,12 @@ void task_serial(void *arg) {
       DeserializationError err = deserializeJson(valores_do_json, receber_json);
       if (err)
       {
-        DynamicJsonDocument erro_json_doc(256);
-        erro_json_doc["erro"] = err.c_str();
         String erro_json;
-        serializeJson(erro_json_doc, erro_json);
+        erro_json.concat("{\"erro\":");
+        erro_json.concat("\"");
+        erro_json.concat(err.c_str());
+        erro_json.concat("\"");
+        erro_json.concat("}");
         Serial.println(erro_json);
       }
       else
@@ -121,11 +128,10 @@ void task_serial(void *arg) {
               break;
             }
           case 3: {//Enviar Máximo ID's
-              DynamicJsonDocument id_json_doc(32);
               String nmax_id_json;
-
-              id_json_doc["nmax_id"] = NMAX_HORARIOS_PARA_ALIMENTAR;
-              serializeJson(id_json_doc, nmax_id_json);
+              nmax_id_json.concat("{\"nmax_id\":");
+              nmax_id_json.concat(NMAX_HORARIOS_PARA_ALIMENTAR);
+              nmax_id_json.concat("}");
               Serial.println(nmax_id_json);
               break;
             }
@@ -137,12 +143,49 @@ void task_serial(void *arg) {
               Serial.println(horario_para_json());
               break;
             }
-          case 6: { //Set Data Arduino
+          case 6: {//Receber % de ilumincação da lampada
+              porcentagem_lampada = valores_do_json["porcentagem"];
               break;
             }
-          case 7: { //Get Data Arduino
+          case 7: {//Receber % de clareza para ligar a lampada(LDR)
+              double V_ldr = valores_do_json["tensao_ldr"];
+              if(V_ldr<=5&&V_ldr>=0){
+                tensao_ldr = V_ldr;
+              }
               break;
             }
+          
+          case 8: {//Enviar status do LED
+              String led_json;
+              led_json.concat("{\"led_status\":");
+              led_json.concat(led_status);
+              led_json.concat(",\"porcentagem\":");
+              led_json.concat(porcentagem_lampada);
+              led_json.concat("}");
+              Serial.println(led_json);
+              break;
+            }
+          case 9: {//Enviar claridade do ambiente
+              double V_ldr = luminosidade_ambiente();
+              String ldr_json;
+              ldr_json.concat("{\"tensao_ldr\":");
+              ldr_json.concat(V_ldr);
+              ldr_json.concat("}");
+              Serial.println(ldr_json);
+              break;
+            }
+           case 10: {//Enviar ping de conectado (OK)
+              String ping_json;
+              ping_json.concat("{\"status\":");
+              ping_json.concat("\"");
+              ping_json.concat("OK");
+              ping_json.concat("\"");
+              ping_json.concat("}");
+              Serial.println(ping_json);
+              break;
+            }
+
+         
         }
       }
     }
