@@ -8,6 +8,7 @@
 {"tipo_msg":1,"id":1,"hora":8,"minuto":15,"tempo_vazao_ms":500, "ja_alimentou":0}
 
 /*Verificar o horário de alimentação a partir do id
+//Resposta: {"id":1,"hora":8,"minuto":15,"tempo_vazao_ms":500, "ja_alimentou":0}
 {"tipo_msg":2,"id":2}
 
 /*Verificar número máximo de horários de alimentação
@@ -27,7 +28,7 @@
 
 /*Receber % de clareza para ligar a lampada(LDR) 
 //maior tensão ->Liga quando ficar mais escuro
-{"tipo_msg":7,"tensao_ldr":5}
+{"tipo_msg":7,"tensao_ldr":5,"limite_ldr":2.5"}
 
 /*Enviar status do LED
 //Resposta:  {"led_status":0,"porcentagem":20}
@@ -42,7 +43,8 @@
 {"tipo_msg":10}
 
 
-
+/*Excluir horário por ID (OK)
+{"tipo_msg":2,"id":2}
 
 
 

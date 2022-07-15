@@ -85,8 +85,6 @@ void alimentador_main(void *arg) {
 
 
 void task_serial(void *arg) {
-  Serial.println("Comecei");
-  Serial.println(horario_para_json());
   while (true) {
 
     if (Serial.available() > 0) {
@@ -170,6 +168,8 @@ void task_serial(void *arg) {
               String ldr_json;
               ldr_json.concat("{\"tensao_ldr\":");
               ldr_json.concat(V_ldr);
+              ldr_json.concat(",\"limite_ldr\":");
+              ldr_json.concat(tensao_ldr);
               ldr_json.concat("}");
               Serial.println(ldr_json);
               break;
@@ -184,7 +184,15 @@ void task_serial(void *arg) {
               Serial.println(ping_json);
               break;
             }
-
+            case 11: {//Excluir Alimentação
+              int id = (int)valores_do_json["id"];
+              if (id == 0 || id > NMAX_HORARIOS_PARA_ALIMENTAR) {
+                Serial.println("{\"erro\":\"id_errado\"}");
+              } else {
+                dar_alimento[id - 1].id = 0;
+              }
+              break;
+            }
          
         }
       }
