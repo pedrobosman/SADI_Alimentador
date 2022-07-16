@@ -23,7 +23,7 @@ double tensao_ldr = 2.5;
 void setup() {
 
   Serial.begin(9600);
-  Serial.setTimeout(100);
+  Serial.setTimeout(10);
   inicializar_motor();
   inicializar_ultrassom();
   inicializar_luz();
