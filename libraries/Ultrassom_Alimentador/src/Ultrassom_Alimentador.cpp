@@ -21,17 +21,15 @@ bool verificar_tampa_despejando(void){
   int distancia_tampa = distancia_ultrassom();
   
   if(distancia_tampa >= 50 || distancia_tampa <= 0){
-    Serial.println("ERRO NO SENSOR ULTRASSONICO OU NA TAMPA!!!");
-    return false;
+    return true; //Deu erro no sensor ultrassonico, mas não é para ficar tentando
+                 //Despejar comida. Tratar Erro depois.
   }
   
   if(distancia_tampa >= (DISTANCIA_TAMPA + 5)){
-    Serial.println("Segurando a comida");
     return false;
   }
   else
   {
-    Serial.println("Despejando comida");
     return true;
   }
 }

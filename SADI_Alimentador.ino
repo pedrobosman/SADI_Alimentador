@@ -10,6 +10,7 @@
 #include "Ldr_Alimentador.h"
 #include "Relogio_Alimentador.h"
 #include "Alimentador.h"
+#include "BuzzerAtivo_Alimentador.h"
 
 #define NMAX_HORARIOS_PARA_ALIMENTAR 20
 //Tasks
@@ -19,6 +20,10 @@ Alimentar dar_alimento[NMAX_HORARIOS_PARA_ALIMENTAR];
 int porcentagem_lampada = 100;
 double tensao_ldr = 2.5;
 
+//BUZZER
+int n_beeps = 2;
+int tempo_beep = 100;
+int tempo_entre_beeps = 100;
 
 void setup() {
 
@@ -28,7 +33,8 @@ void setup() {
   inicializar_ultrassom();
   inicializar_luz();
   inicializar_ldr();
-
+  inicializar_buzzer_ativo();
+  
   //Recuperando última hora definida
   int hora = 0, minuto = 0,  segundo = 0;
   EEPROM.get(0, hora);
@@ -60,6 +66,7 @@ void alimentador_main(void *arg) {
         vTaskDelay(dar_alimento[i].tempo_vazao_ms / portTICK_PERIOD_MS);
         if (verificar_tampa_despejando()) {
           dar_alimento[i].ja_alimentou = true;
+          n_beeps_aviso(n_beeps,tempo_beep,tempo_entre_beeps);
         } else {
           dar_alimento[i].ja_alimentou = false;
         }
